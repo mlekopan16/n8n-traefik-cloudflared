@@ -14,8 +14,7 @@ This repository contains a Docker Compose setup for running N8N workflow automat
 
 - I have been using this on my home SFF server with Proxmox installed:
   - Using [GMKTEC NucBox G3](https://www.gmktec.com/products/nucbox-g3-most-cost-effective-mini-pc-with-intel-n100-processor)
-  - LXC container with Docker preinstalled on Debian
-  - Using [Proxmox Docker installation script](https://community-scripts.github.io/ProxmoxVE/scripts?id=docker)
+  - LXC container with Docker preinstalled on Debian - using [Proxmox Docker installation script](https://community-scripts.github.io/ProxmoxVE/scripts?id=docker)
   - Recommended: At least 6GB disk space for the container
 
 ### Requirements
