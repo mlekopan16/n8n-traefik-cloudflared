@@ -73,7 +73,7 @@ mkdir -p n8n/data postgres cloudflared
     docker logs traefik --tail 100
     ```
 
-8. When changes has to be done, ideally rebuilt Docker containers using command:
+8. When making changes, ideally rebuilt Docker containers using command:
     ```bash
     docker compose down && docker compose up --force-recreate --build --detach
     ```
