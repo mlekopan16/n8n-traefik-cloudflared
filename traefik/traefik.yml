@@ -1,0 +1,47 @@
+api:
+  dashboard: true
+  insecure: true
+
+entryPoints:
+  web:
+    address: ":80"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: web
+  file:
+    directory: "/configurations/"
+    watch: true
+
+log:
+  level: DEBUG
+
+middlewares:
+  rate-limit:
+    rateLimit:
+      average: 100
+      burst: 50
+  secure-headers:
+    headers:
+      browserXssFilter: true
+      contentTypeNosniff: true
+      frameDeny: true
+      sslRedirect: true
+      stsIncludeSubdomains: true
+      stsPreload: true
+      stsSeconds: 31536000
+      customResponseHeaders:
+        X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex"
+        server: ""
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      sniStrict: true
+      cipherSuites:
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_AES_256_GCM_SHA384
