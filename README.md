@@ -77,6 +77,57 @@ mkdir -p n8n/data postgres cloudflared
     docker compose down && docker compose up --force-recreate --build --detach
     ```
 
+## 🔄 Updating and Maintenance
+It's crucial to keep your services and the underlying system up-to-date. This project includes an update script named `stack-update.sh` located in the root directory to help automate this process.
+
+### 1. Review the Update Script
+
+The `stack-update.sh` script is designed to:
+- Pull the latest Docker images for all services defined in your `docker-compose.yml`.
+- Rebuild the Docker Compose stack using `docker compose down` and `docker compose up --force-recreate --build --detach`
+- Update the underlying Debian system using `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y` (change this if needed)
+- Clean up unused Docker resources (containers, networks, images) using `docker system prune -a -f`.
+- Log its actions to a `update.log` file within the project directory.
+
+**Important:** Before using it, please open `stack-update.sh` from the root of this project and review its commands to ensure you understand what it does.
+The script attempts to change to the directory where it's located (`COMPOSE_DIR="."`), which should be the root of your project for `docker-compose.yml` to be found.
+
+### 2. Make the script executable
+
+Navigate to the project's root directory (where `stack-update.sh` is located) and run:
+```bash
+chmod +x stack-update.sh
+```
+
+### 3. Test the script manually
+Before automating, it's highly recommended to run the script manually once to ensure it works correctly in your environment:
+```bash
+sudo ./stack-update.sh
+```
+(You will likely need sudo because the script performs system updates (apt) and manages Docker, which often requires elevated privileges depending on your setup.)
+Check the console output and the generated stack-update.log file in the project directory for any errors or unexpected behavior.
+
+### 4. Automate with Cron (for example to run every week)
+To schedule the script to run automatically (e.g., every Sunday at midnight):
+1. Open the root user's crontab for editing. Using root's crontab is often simplest for scripts that require sudo permissions:
+```bash
+sudo crontab -e
+```
+(If it's your first time, you might be prompted to choose an editor like nano.)
+
+2. Add the following line to the end of the file. Remember to replace /path/to/your/project/directory/ with the actual absolute path to where you cloned this repository or your stack-update.sh file is.
+```bash
+0 0 * * 0 /path/to/your/project/directory/stack-update.sh
+```
+For example, if your project is in /root/n8n-stack:
+```bash
+0 0 * * 0 /root/n8n-stack/stack-update.sh
+```
+3. Save and close the crontab file.
+(If using nano: Ctrl+X, then Y to confirm, then Enter to save.)
+
+This cron job will now execute your stack-update.sh script every Sunday at 00:00 (midnight), helping to keep your deployment updated.
+
 ## 🔧 Configuration
 
 ### Environment Variables
